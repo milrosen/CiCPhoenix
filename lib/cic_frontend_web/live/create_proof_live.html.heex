@@ -24,7 +24,10 @@
       
       <div class="flex w-full max-w-full" phx-update="ignore" id="proof_wrapper">
         <div id="editor" class="w-full" phx-hook="GenProseMirror"></div>
-         <.input field={@form[:markup_text]} id="content" style="display: none" />
+         <%= textarea(@form, :markup_text,
+          class: "hidden",
+          id: "content"
+        ) %>
       </div>
     </div>
     

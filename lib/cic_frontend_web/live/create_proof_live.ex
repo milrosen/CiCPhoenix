@@ -1,6 +1,6 @@
 defmodule CicFrontendWeb.CreateProofLive do
   use CicFrontendWeb, :live_view
-  # import Phoenix.HTML.Form
+  import Phoenix.HTML.Form
 
   alias CicFrontend.{Proofs, Proofs.Proof}
 

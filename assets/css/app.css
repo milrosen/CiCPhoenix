@@ -52,26 +52,6 @@ form input[type="text"]:focus {
     @apply outline-none border-ccGrey ring-0
 }
 
-.textarea {
-    @apply bg-ccWhite-dark font-brand font-regular text-ccGrey text-xs border border-ccGrey h-[300px] resize-none;
-    border-top: none;
-    border-left: none
-}
-
-.line-numbers {
-    @apply border border-ccGrey bg-ccWhite-dark font-brand font-regular text-xs text-ccGrey-light h-[300px] w-[54px] text-right overflow-hidden resize-none ;
-    border-right: none;
-    border-top: none;
-
-}
-
-.line-numbers:focus {
-    @apply outline-none border-ccGrey ring-0
-}
-
-.textarea:focus {
-    @apply outline-none ring-0 border-ccGrey
-}
 
 .create-button {
     @apply bg-ccGreen border-ccGrey text-ccWhite-light text-base font-brand font-bold
@@ -96,22 +76,6 @@ form input[type="text"]:focus {
     border-radius: 50%;
     border: 1.5px solid #5C6166;
     padding: 2px;
-}
-
-.syntax-area {
-    @apply bg-white border text-xs font-brand h-auto pb-10;
-    border-top: none;
-    border-left: none;
-}
-
-.syntax-numbers {
-    @apply border border-ccGrey font-brand py-[12px] text-xs text-ccGrey-light bg-white w-[54px] text-right overflow-hidden resize-none;
-    border-right: none;
-    border-top: none;
-}
-
-.syntax-numbers:focus {
-    @apply outline-none border-ccGrey ring-0
 }
 
 .image-down-arrow::after {

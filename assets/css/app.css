@@ -1,6 +1,10 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+@import "../node_modules/prosemirror-example-setup/style/style.css";
+@import "../node_modules/prosemirror-gapcursor/style/gapcursor.css";
+@import "../node_modules/prosemirror-menu/style/menu.css";
+@import "../node_modules/prosemirror-view/style/prosemirror.css";
 
 /* This file is for your main application CSS */
 
@@ -16,6 +20,20 @@
     src: url("/fonts/AnonymousPro-Bold.ttf");
     font-weight: bold;
     font-style: normal;
+}
+
+.ProseMirror>p {
+    @apply my-3
+}
+.ProseMirror>ul {
+    @apply my-3 list-disc
+}
+.ProseMirror>ol {
+    @apply my-3 list-decimal
+}
+
+.ProseMirror {
+    @apply p-1
 }
 
 .menu-item {
@@ -107,3 +125,10 @@ form input[type="text"]:focus {
     border-style: solid;
 }
 
+.interactive-img-button {
+    filter: brightness(80%);
+}
+
+.interactive-img-button:active {
+    transform: scale(110%);
+}

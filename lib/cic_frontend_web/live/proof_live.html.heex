@@ -4,7 +4,7 @@
       <img src="" alt="Profile Image" class="round-image-padding h-8 w-8 mb-6 overflow-hidden" />
       <div class="flex flex-col ml-4">
         <div class="font-bold text-base text-ccGrey ">
-          <%= @current_user.email %>/<%= @proof.name %>
+          <%= @email %>/<%= @proof.name %>
         </div>
         
         <div class="text-lg text-ccGrey font-bold "><%= @proof.updated_at %></div>
@@ -33,16 +33,27 @@
     
     <div>
       <%= if @current_user.id == @proof.user_id do %>
-        <button class="px-1 font-brand" type="button" phx-click={}>
+        <button
+          class="interactive-img-button px-1 font-brand"
+          type="button"
+          phx-value-id={@proof.id}
+          phx-click="delete"
+        >
           <img src="/" alt="delete" />
         </button>
         
-        <button class="px-1 font-brand" type="button" phx-click={}>
+        <button class="interactive-img-button px-1 font-brand" type="button" phx-click={}>
           <img src="/" alt="edit" />
         </button>
       <% end %>
       
-      <button class="px-1 font-brand" type="button" phx-click={}>
+      <button
+        class="interactive-img-button px-1 font-brand"
+        type="button"
+        id="copy-button"
+        phx-hook="CopyToClipboard"
+        data-clipboard-proof={@proof.markup_text}
+      >
         <img src="/" alt="copy" />
       </button>
     </div>

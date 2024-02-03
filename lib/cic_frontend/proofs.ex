@@ -7,6 +7,7 @@ defmodule CicFrontend.Proofs do
   alias CicFrontend.Repo
 
   alias CicFrontend.Proofs.Proof
+  alias CicFrontend.Accounts.User
 
   @doc """
   Returns the list of proofs.
@@ -75,6 +76,19 @@ defmodule CicFrontend.Proofs do
   end
 
   @doc """
+  Updates a proof, if the User does not own the proof associated, creates a copy instead.
+
+  """
+
+  def update_or_insert_proof(%User{} = user, %Proof{} = proof, attrs) do
+    if(user.id == proof.user_id) do
+      update_proof(proof, attrs)
+    else
+      create_proof(user, attrs)
+    end
+  end
+
+  @doc """
   Deletes a proof.
 
   ## Examples
@@ -86,8 +100,15 @@ defmodule CicFrontend.Proofs do
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_proof(%Proof{} = proof) do
-    Repo.delete(proof)
+  def delete_proof(%User{} = user, proof_id) do
+    proof = Repo.get(Proof, proof_id)
+
+    if(user.id == proof.user_id) do
+      Repo.delete(proof)
+      {:ok, proof}
+    else
+      {:error, :unauthorized}
+    end
   end
 
   @doc """

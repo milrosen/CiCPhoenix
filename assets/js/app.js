@@ -22,6 +22,8 @@ import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 import hljs from "highlight.js"
+import {Editor} from "./editor"
+
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 
@@ -58,6 +60,26 @@ Hooks.Highlight = {
         return codeBlock;
     }
 };
+
+function debounce(func, timeout = 300){
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => { func.apply(this, args); }, timeout);
+    };
+}
+
+Hooks.GenProseMirror = {
+    mounted() {
+        const editor = new Editor('#editor')
+        const content = document.querySelector("#content")
+    
+        this.el.addEventListener("keydown", debounce(() => {
+            console.log(editor.value)
+            content.value = editor.value;
+        }), 300)
+    }
+}
 
 Hooks.UpdateLineNumbers = {
     mounted() {

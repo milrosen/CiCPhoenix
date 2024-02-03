@@ -1,5 +1,7 @@
 {
   "dependencies": {
-    "highlight.js": "^11.9.0"
+    "highlight.js": "^11.9.0",
+    "prosemirror-example-setup": "^1.2.2",
+    "prosemirror-markdown": "^1.12.0"
   }
 }

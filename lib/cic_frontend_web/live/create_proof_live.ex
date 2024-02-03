@@ -1,37 +1,46 @@
 defmodule CicFrontendWeb.CreateProofLive do
   use CicFrontendWeb, :live_view
-  import Phoenix.HTML.Form
+  # import Phoenix.HTML.Form
 
   alias CicFrontend.{Proofs, Proofs.Proof}
 
-  def mount(_params, _session, socket) do
+  def mount(%{"id" => id}, _session, socket) do
+    proof = Proofs.get_proof!(id)
+
     socket =
       assign(
         socket,
-        form: to_form(Proofs.change_proof(%Proof{}))
+        form: to_form(Proofs.change_proof(proof)),
+        proof: proof
       )
 
     {:ok, socket}
   end
 
-  def handle_event("create", %{"proof" => params}, socket) do
-    case Proofs.create_proof(socket.assigns.current_user, params) do
-      {:ok, proof} ->
-        socket = push_event(socket, "clear-textarea", %{})
-        # blanks the inputs - change this
-        changeset = Proofs.change_proof(%Proof{})
-        socket = assign(socket, :form, to_form(changeset))
+  def mount(_params, _session, socket) do
+    socket =
+      assign(
+        socket,
+        form: to_form(Proofs.change_proof(%Proof{})),
+        proof: %Proof{}
+      )
 
+    {:ok, socket}
+  end
+
+  def handle_event("save", %{"proof" => params}, socket) do
+    case Proofs.update_or_insert_proof(socket.assigns.current_user, socket.assigns.proof, params) do
+      {:ok, proof} ->
         {:noreply, push_navigate(socket, to: ~p"/proof?#{[id: proof]}")}
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, :form, to_form(changeset))}
+      {:error, msg} ->
+        {:noreply, put_flash(socket, :error, msg)}
     end
   end
 
   def handle_event("validate", %{"proof" => params}, socket) do
     changeset =
-      %Proof{}
+      socket.assigns.proof
       |> Proofs.change_proof(params)
       |> Map.put(:action, :validate)
 

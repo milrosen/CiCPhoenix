@@ -66,8 +66,7 @@ defmodule CicFrontendWeb.Router do
 
     live_session :require_authenticated_user,
       on_mount: [{CicFrontendWeb.UserAuth, :ensure_authenticated}] do
-      live "/create", CreateProofLive
-      live "/proof", ProofLive
+      live "/proof", CreateProofLive
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
     end

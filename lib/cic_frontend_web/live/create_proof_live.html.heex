@@ -2,13 +2,12 @@
   <h1 class="font-brand font-bold text-3xl text-ccGrey">Define Math</h1>
 </div>
 
-<.form for={@form} phx-submit="create" phx-change="validate">
+<.form for={@form} phx-submit="save" phx-change="validate">
   <div class="justify-center px-28 w-full space-y-4 mb-10 ">
     <.input
       field={@form[:description]}
       placeholder="Proof Description... "
       autocomplete="off"
-      comment="be sure to change this, it only validates on focus changes. I assume there's a debounce that better fits"
       phx-debounce="blur"
     />
     <div>
@@ -23,20 +22,9 @@
         </div>
       </div>
       
-      <div class="flex w-full" phx-update="ignore" id="gist_wrapper">
-        <textarea id="line-numbers" readonly class="line-numbers rounded-bl-md">
-        <%= "1\n" %>
-        </textarea> <%= textarea(
-          @form,
-          :markup_text,
-          phx_hook: "UpdateLineNumbers",
-          id: "proof-textarea",
-          class: "w-full rounded-br-md textarea",
-          placeholder: "Prove Something...",
-          spellcheck: false,
-          autocomplete: "off",
-          phx_debounce: "blur"
-        ) %>
+      <div class="flex w-full max-w-full" phx-update="ignore" id="proof_wrapper">
+        <div id="editor" class="w-full" phx-hook="GenProseMirror"></div>
+         <.input field={@form[:markup_text]} id="content" style="display: none" />
       </div>
     </div>
     

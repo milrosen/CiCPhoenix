@@ -1,0 +1,47 @@
+<div class="flex items-center justify-center pt-10">
+  <h1 class="font-brand font-bold text-3xl text-ccGrey">Define Math</h1>
+</div>
+
+<.form for={@form} phx-submit="create" phx-change="validate">
+  <div class="justify-center px-28 w-full space-y-4 mb-10 ">
+    <.input
+      field={@form[:description]}
+      placeholder="Proof Description... "
+      autocomplete="off"
+      comment="be sure to change this, it only validates on focus changes. I assume there's a debounce that better fits"
+      phx-debounce="blur"
+    />
+    <div>
+      <div class="flex p-2 items-center bg-ccWhite-dark rounded-t-md border border-ccGrey-light  border-solid">
+        <div class="w-[300px] mb-2">
+          <.input
+            field={@form[:name]}
+            placeholder="Name Your Proof..."
+            autocomplete="off"
+            phx-debounce="blur"
+          />
+        </div>
+      </div>
+      
+      <div class="flex w-full" phx-update="ignore" id="gist_wrapper">
+        <textarea id="line-numbers" readonly class="line-numbers rounded-bl-md">
+        <%= "1\n" %>
+        </textarea> <%= textarea(
+          @form,
+          :markup_text,
+          phx_hook: "UpdateLineNumbers",
+          id: "proof-textarea",
+          class: "w-full rounded-br-md textarea",
+          placeholder: "Prove Something...",
+          spellcheck: false,
+          autocomplete: "off",
+          phx_debounce: "blur"
+        ) %>
+      </div>
+    </div>
+    
+    <div class="flex justify-end">
+      <.button class="create-button" phx-disable-with="Saving...">Save Proof</.button>
+    </div>
+  </div>
+</.form>

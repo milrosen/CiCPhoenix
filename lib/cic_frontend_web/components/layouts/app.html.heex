@@ -1,0 +1,113 @@
+<header class="flex justify-between items-center px-6 py-3 bg-ccWhite-light border-b-2 border-ccGrey-light">
+  <div class="flex relative">
+    <a href={~p"/"} class="pr-6">
+      <div class="text-ccGrey font-brand font-bold text-3xl">Blueprint</div>
+    </a>
+    <div>
+      <input type="text" placeholder="search..." class="rounded-lg" />
+    </div>
+    <button class="mt-2 ml-2  font-brand font-bold font hover:text-ccGrey-light text-ccGrey">
+      Browse Proofs
+    </button>
+  </div>
+  <div class="relative">
+    <button
+      type="button"
+      id="user-menu-button"
+      class="font-brand text-ccGrey image-down-arrow"
+      phx-click={CicFrontendWeb.Layouts.App.toggle_dropdown_menu()}
+    >
+      <img src="" alt="Profile Image" class="round-image-padding  w-8 h-8 overflow-hidden" />
+    </button>
+    <div
+      id="dropdown_menu"
+      phx-click-away={CicFrontendWeb.Layouts.App.toggle_dropdown_menu()}
+      class="dropdown-menu-arrow absolute right-0 mt-2 py-2 w-48 bg-ccWhite-dark rounded-lg shadow-xl border border-ccGrey"
+      hidden="true"
+    >
+      <%= if @current_user do %>
+        <.link
+          href={~p"/users/settings"}
+          class="menu-item border-b border-ccGrey-light "
+          role="menu-item"
+          tabindex="-1"
+          method="get"
+          id="user-menu-item-0"
+        >
+          Signed in as <%= @current_user.email %>
+        </.link>
+        <.link
+          href="#"
+          class="menu-item "
+          role="menu-item"
+          tabindex="-1"
+          method="get"
+          id="user-menu-item-1"
+        >
+          Your Proofs
+        </.link>
+        <.link
+          href="#"
+          class="menu-item border-b border-ccGrey-light"
+          role="menu-item"
+          tabindex="-1"
+          method="get"
+          id="user-menu-item-2"
+        >
+          Saved Proofs
+        </.link>
+
+        <.link
+          href={~p"/users/log_out"}
+          class="menu-item "
+          role="menu-item"
+          tabindex="-1"
+          method="delete"
+          id="user-menu-item-3"
+        >
+          Sign Out
+        </.link>
+      <% else %>
+        <.link
+          href={~p"/users/log_in"}
+          class="menu-item border-b border-ccGrey-light "
+          role="menu-item"
+          tabindex="-1"
+          method="get"
+          id="user-menu-item-0"
+        >
+          Sign In
+        </.link>
+
+        <.link
+          href={~p"/users/log_out"}
+          class="menu-item"
+          role="menu-item"
+          tabindex="-1"
+          method="get"
+          id="user-menu-item-1"
+        >
+          Register
+        </.link>
+      <% end %>
+    </div>
+  </div>
+</header>
+
+<main>
+  <.flash_group flash={@flash} />
+  <%= @inner_content %>
+</main>
+
+<footer class="h-[120px] w-full flex justify-center text-ccGrey-light px-16 py-20 font-brand text-xs">
+  <div class="w-full px-10">
+    <div class="border-t-[1px] border-ccGrey-light w-full"></div>
+    <div class="flex items-center space-x-2 py-6 ">
+      <div class="px-3">
+        <a class="hover:underline" href="https://github.com/milrosen/calculus-of-constructions">
+          Github
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>

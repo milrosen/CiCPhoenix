@@ -27,39 +27,8 @@ import {Editor} from "./editor"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 
-function updateLineNumbers(value) {
-    const lineNumberText = document.querySelector("#line-numbers");
-    if (!lineNumberText) return;
-    
-    const lines = value.split("\n");
-
-    const numbers = lines.map((_, index) => index+1).join("\n") + "\n"
-
-    lineNumberText.value = numbers;
-};
 
 let Hooks = {};
-
-Hooks.Highlight = {
-    mounted() {
-        let codeBlock = this.el.querySelector("pre code");
-        if (codeBlock == null) return;
-
-        trimmed = this.trimCodeBlock(codeBlock);
-        hljs.highlightElement(trimmed)
-        updateLineNumbers(trimmed.textContent)
-    },
-
-    trimCodeBlock(codeBlock) {
-        const lines = codeBlock.textContent.split("\n");
-        if (lines.length > 2) {
-            lines.shift();
-            lines.pop();
-        }
-        codeBlock.textContent = lines.join("\n");
-        return codeBlock;
-    }
-};
 
 function debounce(func, timeout = 300){
     let timer;
@@ -79,38 +48,6 @@ Hooks.GenProseMirror = {
             content.value = editor.value;
         }), 300)
     }
-}
-
-Hooks.UpdateLineNumbers = {
-    mounted() {
-        const lineNumberText = document.querySelector("#line-numbers");
-
-        this.el.addEventListener("input", () => {
-            updateLineNumbers(this.el.value);
-        })
-
-        this.el.addEventListener("keydown", (e) => {
-            if (e.key == "Tab") {
-                e.preventDefault()
-                var start = this.el.selectionStart;
-                var end = this.el.selectionEnd;
-
-                this.el.value= this.el.value.substring(0, start) + "\t" + this.el.value.substring(end)
-                this.el.selectionStart = this.el.selectionEnd = start + 1;
-            }
-        })
-
-        this.el.addEventListener("scroll", () => {
-            lineNumberText.scrollTop = this.el.scrollTop
-        })
-
-        this.handleEvent("clear-textarea", () => {
-            this.el.value = "";
-            lineNumberText.value = "1\n";
-        })
-
-        updateLineNumbers(this.el.value);
-    }  
 }
 
 let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}, hooks: Hooks})

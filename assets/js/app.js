@@ -44,7 +44,6 @@ Hooks.GenProseMirror = {
         const content = document.querySelector("#content")
     
         this.el.addEventListener("keydown", debounce(() => {
-            console.log(editor.value)
             content.value = editor.value;
         }), 300)
     }

@@ -1,49 +1,33 @@
 import {EditorState, TextSelection, Selection} from "prosemirror-state"
 import {EditorView} from "prosemirror-view"
-import {Schema} from "prosemirror-model"
 import {schema, defaultMarkdownParser,
         defaultMarkdownSerializer} from "prosemirror-markdown"
 import {exampleSetup} from "prosemirror-example-setup"
 import {keymap} from "prosemirror-keymap"
 import {
     EditorView as CodeMirror, keymap as cmKeymap, drawSelection
-  } from "@codemirror/view"
-  import {javascript} from "@codemirror/lang-javascript"
-  import {defaultKeymap} from "@codemirror/commands"
-  import {syntaxHighlighting, defaultHighlightStyle} from "@codemirror/language"
-  
-  import {exitCode} from "prosemirror-commands"
-  import {undo, redo} from "prosemirror-history"
+} from "@codemirror/view"
+import {defaultKeymap} from "@codemirror/commands"
+import {syntaxHighlighting, defaultHighlightStyle} from "@codemirror/language"
+import {exitCode} from "prosemirror-commands"
+import {undo, redo} from "prosemirror-history"
+import { javascript } from "@codemirror/lang-javascript"
 
-// Mix the nodes from prosemirror-schema-list into the basic schema to
-// create a schema with list support.
-
-// const codeMirrorSpec = {
-//     content: "text*",
-//     group: "block",
-//     code: true,
-//     defining: true,
-//     marks: "",
-//     attrs: {params: {default: ""}},
-//     parseDOM: [{tag: "pre", preserveWhitespace: "full", getAttrs: node => (
-//       {params: (node).getAttribute("data-params") || ""}
-//     )}],
-//     toDOM(node) { return ["pre", node.attrs.params ? {"data-params": node.attrs.params} : {}, ["div", 0]] }
-// }
-
-// const codeMirrorSchema = new Schema({
-//     nodes: schema.spec.nodes.update("code_block", codeMirrorSpec),
-//     marks: schema.spec.marks
-// })
 
 export class Editor {
-    constructor(id) {
-        console.log(schema)
+    constructor(id, codeChange) {
         this.view = new EditorView(document.querySelector(id), {
             state: EditorState.create({
                 doc: defaultMarkdownParser.parse(document.querySelector("#content").value),
                 plugins: exampleSetup({schema: schema}),
         }), 
+        dispatchTransaction: (transaction) => {
+            if (isCodeTransaction(transaction)) {
+                codeChange(code(transaction.before.content), code(transaction.doc.content))
+            }
+            let newState = this.view.state.apply(transaction)
+            this.view.updateState(newState)
+        },
         nodeViews: {
             code_block(node, view, getPos) { return new CodeBlockView(node, view, getPos) }
         }})
@@ -53,6 +37,20 @@ export class Editor {
     }
 }
 
+function isCodeTransaction(transaction) {
+    return transaction.before.content.size != transaction.doc.content.size
+        && transaction.updated == 1;
+}
+
+function code(content) {
+    return content.content.filter(e => e.type.name == "code_block").map(e => {
+        if (e.content.content[0]) {
+            return e.content.content[0].text
+        } else {
+            return "";
+        }
+    })
+}
 
 class CodeBlockView {
     constructor(node, view, getPos) {
@@ -70,8 +68,8 @@ class CodeBlockView {
             ...defaultKeymap
           ]),
           drawSelection(),
-          syntaxHighlighting(defaultHighlightStyle),
           javascript(),
+          syntaxHighlighting(defaultHighlightStyle),
           CodeMirror.updateListener.of(update => this.forwardUpdate(update))
         ]
       })

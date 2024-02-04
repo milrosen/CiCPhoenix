@@ -21,8 +21,8 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
-import hljs from "highlight.js"
 import {Editor} from "./editor"
+import "./type_check_socket.js"
 
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
@@ -38,9 +38,13 @@ function debounce(func, timeout = 300){
     };
 }
 
+
+
 Hooks.GenProseMirror = {
     mounted() {
-        const editor = new Editor('#editor')
+        const editor = new Editor('#editor', (before, after) => {
+            console.log(before, after)
+        })
         const content = document.querySelector("#content")
     
         this.el.addEventListener("keydown", debounce(() => {

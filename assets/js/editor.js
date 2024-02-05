@@ -11,6 +11,7 @@ import {defaultKeymap} from "@codemirror/commands"
 import {syntaxHighlighting, defaultHighlightStyle} from "@codemirror/language"
 import {exitCode} from "prosemirror-commands"
 import {undo, redo} from "prosemirror-history"
+import { example } from "./lang/coc"
 import { javascript } from "@codemirror/lang-javascript"
 
 
@@ -68,7 +69,7 @@ class CodeBlockView {
             ...defaultKeymap
           ]),
           drawSelection(),
-          javascript(),
+          example(),
           syntaxHighlighting(defaultHighlightStyle),
           CodeMirror.updateListener.of(update => this.forwardUpdate(update))
         ]

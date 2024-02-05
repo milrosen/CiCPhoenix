@@ -22,7 +22,7 @@ import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 import {Editor} from "./editor"
-import "./type_check_socket.js"
+import socket from "./type_check_socket.js"
 
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
@@ -39,11 +39,15 @@ function debounce(func, timeout = 300){
 }
 
 
-
 Hooks.GenProseMirror = {
     mounted() {
+        let typeChannel = socket.channel("document:420", {})
+            typeChannel.join()
+
+        typeChannel.on("type_check", payload => {console.log("recieved type check") })
+            
         const editor = new Editor('#editor', (before, after) => {
-            console.log(before, after)
+            typeChannel.push("code_update", {body: [before, after]})
         })
         const content = document.querySelector("#content")
     

@@ -1,0 +1,61 @@
+@top Expression { expr }
+kw<term> { @specialize[@name={term}]<ident, term> }
+
+
+expr {
+    bexpr |
+    Lambda {
+        "\\" "(" Identifier ":" expr ")" "->" expr 
+    } |
+    Pi {
+        "\\\/" "(" Identifier  ":" expr ")" "->" expr |
+        bexpr "->" expr 
+    }
+}
+
+vexpr {
+    Identifier "@" Number |
+    Identifier 
+}
+
+bexpr {
+    App {
+        bexpr aexpr
+    } |
+    aexpr
+}
+
+aexpr {
+    vexpr |
+    "*" |
+    kw<"box"> |
+    "(" expr ")"
+}
+
+Identifier {
+    operator | ident
+}
+
+@skip { spaces | newline }
+
+@tokens {
+    ident {
+        identifierChar (identifierChar | @digit)* 
+    }
+
+    operator {
+        "(" opChar ")"
+    }
+
+    Number {
+        @digit
+    }
+
+    opChar { $[\!\#\$\%\&\*\+\.\/\<\=\>\?\@\\\^\|\-\~] }
+
+    identifierChar { $[a-zA-Z] }
+
+    spaces[@export] { $[\u0009 \u000b\u00a0]+ }
+    newline[@export] { $[\r\n] }
+    "(" ")" "\\/" "\\" "->"
+}

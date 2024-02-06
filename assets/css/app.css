@@ -22,9 +22,24 @@
     font-style: normal;
 }
 
+.outbox {
+    @apply border p-3
+}
+.error {
+    @apply border-ccRed
+}
+.ok {
+    @apply border-ccGreen
+}
+
 .ProseMirror>p {
     @apply my-3
 }
+
+.ProseMirror>h1 {
+    @apply my-3 text-xl font-bold
+}
+
 .ProseMirror>ul {
     @apply my-3 list-disc
 }

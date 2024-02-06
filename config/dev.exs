@@ -2,10 +2,11 @@ import Config
 
 # Configure your database
 config :cic_frontend, CicFrontend.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "backend_stuff",
+  password: "backend_password",
   hostname: "localhost",
-  database: "cic_frontend_dev",
+  database: "backend_stuff",
+  port: 5433,
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10

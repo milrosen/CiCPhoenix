@@ -44,7 +44,23 @@ Hooks.GenProseMirror = {
         let typeChannel = socket.channel("document:420", {})
             typeChannel.join()
 
-        typeChannel.on("type_check", payload => {console.log("recieved type check") })
+        typeChannel.on("type_check", payload => {
+            outBox = document.querySelector("#output");
+            if (payload.body.typeError) {
+                outBox.innerHTML = payload.body.typeError
+                outBox.className = "error outbox"
+            } else {
+                outBox.innerHTML = ""
+                section = payload.body.ok.pop()
+                
+                outBox.insertAdjacentHTML('beforeend', section.type);
+                section.context.forEach(variable => {
+                    outBox.insertAdjacentHTML('beforeend', 
+                    `<p>${Object.keys(variable)[0]} : ${Object.values(variable)[0]}<p>`);  
+                })
+                outBox.className = "ok outbox"
+            }
+        })
             
         const editor = new Editor('#editor', (before, after) => {
             typeChannel.push("code_update", {body: [before, after]})

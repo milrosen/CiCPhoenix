@@ -3,8 +3,10 @@
     "@lezer/generator": "^1.0.0"
   },
   "scripts": {
-    "prepare": "lezer-generator js/lang/coc.grammar -o js/lang/parser.js"
+    "prepare": "lezer-generator js/lang/coc.grammar -o js/lang/parser.js",
+    "deploy": "cd .. && mix assets.deploy && rm -f _build/esbuild"
   },
+  
   "dependencies": {
     "@codemirror/lang-javascript": "^6.2.1",
     "@lezer/lr": "^1.0.0",

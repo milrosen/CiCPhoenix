@@ -66,6 +66,10 @@ Hooks.GenProseMirror = {
             typeChannel.push("code_update", {body: [before, after]})
         })
         const content = document.querySelector("#content")
+        window.setTimeout(() => {
+            console.log(editor.code)
+            typeChannel.push("code_update", {body: [{}, editor.code]})
+        }, 0) 
     
         this.el.addEventListener("keydown", debounce(() => {
             content.value = editor.value;

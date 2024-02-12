@@ -36,6 +36,10 @@ export class Editor {
     get value() {
         return defaultMarkdownSerializer.serialize(this.view.state.doc)
     }
+
+    get code() {
+      return code(this.view.state.doc.content)
+    }
 }
 
 function isCodeTransaction(transaction) {

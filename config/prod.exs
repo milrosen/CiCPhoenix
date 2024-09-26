@@ -9,7 +9,7 @@ config :cic_frontend, CicFrontendWeb.Endpoint,
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Configures Swoosh API Client
-config :swoosh, api_client: Swoosh.ApiClient.Finch, finch_name: CicFrontend.Finch
+config :swoosh, :api_client, false
 
 # Disable Swoosh Local Memory Storage
 config :swoosh, local: false
@@ -24,6 +24,7 @@ config :cic_frontend, CicFrontendWeb.Endpoint,
   # Possibly not needed, but doesn't hurt
   http: [port: {:system, "PORT"}],
   url: [host: System.get_env("APP_NAME") <> ".gigalixirapp.com", port: 443],
+  check_origin: ["https://rotating-quick-macaw.gigalixirapp.com"],
   secret_key_base: Map.fetch!(System.get_env(), "SECRET_KEY_BASE"),
   server: true
 

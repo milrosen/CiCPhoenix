@@ -5,7 +5,7 @@ defmodule CicFrontend.MixProject do
     [
       app: :cic_frontend,
       version: "0.1.0",
-      elixir: "~> 1.14",
+      elixir: "~> 1.16.0",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
@@ -52,7 +52,8 @@ defmodule CicFrontend.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:plug_cowboy, "~> 2.5"},
-      {:calculus_of_inductive_types, git: "https://github.com/milrosen/calculus-of-constructions.git"}
+      {:calculus_of_inductive_types,
+       git: "https://github.com/milrosen/calculus-of-constructions.git", tag: "main"}
     ]
   end
 

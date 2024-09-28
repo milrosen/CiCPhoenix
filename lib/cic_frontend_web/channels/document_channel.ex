@@ -10,6 +10,7 @@ defmodule CicFrontendWeb.DocumentChannel do
       case CalculusOfInductiveTypes.typeProof(new) do
         {:ok, types} -> %{:ok => types}
         {:typeError, errorMsg} -> %{:typeError => errorMsg}
+        {:error, {_, :parser, error}} -> %{:parseError => error}
       end
 
     broadcast!(socket, "type_check", %{body: body})

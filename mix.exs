@@ -53,7 +53,7 @@ defmodule CicFrontend.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:plug_cowboy, "~> 2.5"},
       {:calculus_of_inductive_types,
-       git: "https://github.com/milrosen/calculus-of-constructions.git", tag: "main"}
+       github: "milrosen/calculus-of-constructions"}
     ]
   end
 

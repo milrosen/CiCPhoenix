@@ -46,17 +46,16 @@ Hooks.GenProseMirror = {
 
         typeChannel.on("type_check", payload => {
             outBox = document.querySelector("#output");
-            if (payload.body.typeError) {
-                outBox.innerHTML = payload.body.typeError
+            if (payload.body.error) {
+                outBox.innerHTML = payload.body.error
                 outBox.className = "error outbox"
             } else {
                 outBox.innerHTML = ""
-                section = payload.body.ok.pop()
+                proof = payload.body.ok
                 
-                outBox.insertAdjacentHTML('beforeend', section.type);
-                section.context.forEach(variable => {
+                proof.forEach(command => {
                     outBox.insertAdjacentHTML('beforeend', 
-                    `<p>${Object.keys(variable)[0]} : ${Object.values(variable)[0]}<p>`);  
+                    `<p>${command}<p>`);  
                 })
                 outBox.className = "ok outbox"
             }

@@ -5,12 +5,32 @@ defmodule CicFrontendWeb.DocumentChannel do
     {:ok, socket}
   end
 
-  def handle_in("code_update", %{"body" => [_, new]}, socket) do
+  def handle_in("code_update", %{"body" => [_, [prog]]}, socket) do
     body =
-      case CalculusOfInductiveTypes.typeProof(new) do
-        {:ok, types} -> %{:ok => types}
-        {:typeError, errorMsg} -> %{:typeError => errorMsg}
-        {:error, {_, :parser, error}} -> %{:parseError => error}
+      case CalculusOfConstructions.check(prog) do
+        {:ok, proof} ->
+          %{
+            ok:
+              Enum.map(
+                proof,
+                fn
+                  {:error, errormsg} ->
+                    errormsg
+
+                  {:def, name, expr} ->
+                    "def #{name} := #{PrettyPrint.printExpr(expr)}"
+
+                  {:check, type} ->
+                    PrettyPrint.printExpr(type)
+
+                  {:eval, term, _} ->
+                    "term evaluates to #{PrettyPrint.printExpr(term)}"
+                end
+              )
+          }
+
+        {:error, errmsg} ->
+          %{error: errmsg}
       end
 
     broadcast!(socket, "type_check", %{body: body})

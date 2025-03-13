@@ -1,5 +1,5 @@
 %{
-  "calculus_of_constructions": {:git, "https://github.com/milrosen/calculus-of-constructions.git", "ddb9953e2875bb0d297774d63d86201c7183062b", []},
+  "calculus_of_constructions": {:git, "https://github.com/milrosen/calculus-of-constructions.git", "f678e649ed244d21f5db4650ae07b40473874bb9", []},
   "calculus_of_inductive_types": {:git, "https://github.com/milrosen/calculus-of-constructions.git", "2d1be085989f597c8eef36fb3c02d0e5f45add5c", []},
   "castore": {:hex, :castore, "1.0.5", "9eeebb394cc9a0f3ae56b813459f990abb0a3dedee1be6b27fdb50301930502f", [:mix], [], "hexpm", "8d7c597c3e4a64c395980882d4bca3cebb8d74197c590dc272cfd3b6a6310578"},
   "comeonin": {:hex, :comeonin, "5.4.0", "246a56ca3f41d404380fc6465650ddaa532c7f98be4bda1b4656b3a37cc13abe", [:mix], [], "hexpm", "796393a9e50d01999d56b7b8420ab0481a7538d0caf80919da493b4a6e51faf1"},

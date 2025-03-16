@@ -26,8 +26,6 @@ import socket from "./type_check_socket.js"
 
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-
-
 let Hooks = {};
 
 function debounce(func, timeout = 300){
@@ -45,29 +43,38 @@ Hooks.GenProseMirror = {
             typeChannel.join()
 
         typeChannel.on("type_check", payload => {
-            outBox = document.querySelector("#output");
-            if (payload.body.error) {
-                outBox.innerHTML = payload.body.error
-                outBox.className = "error outbox"
-            } else {
-                outBox.innerHTML = ""
-                proof = payload.body.ok
+            proofs = payload.body
+            outboxes = document.querySelectorAll(".cm-editor")
+
+
+            proofs.forEach((proof, index) => {
+                outbox = outboxes[index]
+                classname = "ok"
+                if (proof.error) {
+                    classname = "error"
+                    proof = proof.error
+                } else {
+                    proof = proof.ok.join("\n")
+                }
+                if (!outbox.lastChild.className.includes("outbox")) {
+                    outbox.insertAdjacentHTML('beforeend', `<p>${proof}</p>`)
+                } else {
+                    out = outbox.lastChild
+                    out.innerHTML = proof
+                }
                 
-                proof.forEach(command => {
-                    outBox.insertAdjacentHTML('beforeend', 
-                    `<p>${command}<p>`);  
-                })
-                outBox.className = "ok outbox"
-            }
+                outbox.lastChild.className =`${classname} outbox`
+            });
         })
             
         const editor = new Editor('#editor', (before, after) => {
-            typeChannel.push("code_update", {body: [before, after]})
+            typeChannel.push("code_update", {body: after})
         })
+
         const content = document.querySelector("#content")
         window.setTimeout(() => {
             console.log(editor.code)
-            typeChannel.push("code_update", {body: [{}, editor.code]})
+            typeChannel.push("code_update", {body: editor.code})
         }, 0) 
     
         this.el.addEventListener("keydown", debounce(() => {

@@ -5,39 +5,44 @@ defmodule CicFrontendWeb.DocumentChannel do
     {:ok, socket}
   end
 
-  def handle_in("code_update", %{"body" => [_, [prog]]}, socket) do
+  def handle_in("code_update", %{"body" => progs}, socket) do
     body =
-      case CalculusOfConstructions.check(prog) do
-        {:ok, proof} ->
-          %{
-            ok:
-              Enum.map(
-                proof,
-                fn
-                  {:error, errormsg} ->
-                    errormsg
+      Enum.map(
+        progs,
+        fn prog ->
+          case CalculusOfConstructions.check(prog) do
+            {:error, errmsg} ->
+              %{error: errmsg}
 
-                  {:def, name, expr} ->
-                    "def #{name} := #{PrettyPrint.printExpr(expr)}"
+            {:ok, proof} ->
+              %{
+                ok:
+                  Enum.map(
+                    proof,
+                    fn
+                      {:error, errormsg} ->
+                        errormsg
 
-                  {:type, type} ->
-                    PrettyPrint.printExpr(type)
+                      {:def, name, expr} ->
+                        "def #{name} := #{PrettyPrint.printExpr(expr)}"
 
-                  {:eval, term, _} ->
-                    "term evaluates to #{PrettyPrint.printExpr(term)}"
+                      {:type, type} ->
+                        PrettyPrint.printExpr(type)
 
-                  {:with, _} ->
-                    "TODO: Print Context"
+                      {:eval, term, _} ->
+                        "term evaluates to #{PrettyPrint.printExpr(term)}"
 
-                  {:check, name, type, term} ->
-                    "#{name} : #{PrettyPrint.printExpr(type)} = #{PrettyPrint.printExpr(term)}"
-                end
-              )
-          }
+                      {:with, _} ->
+                        "TODO: Print Context"
 
-        {:error, errmsg} ->
-          %{error: errmsg}
-      end
+                      {:check, name, type, term} ->
+                        "#{name} : #{PrettyPrint.printExpr(type)} = #{PrettyPrint.printExpr(term)}"
+                    end
+                  )
+              }
+          end
+        end
+      )
 
     broadcast!(socket, "type_check", %{body: body})
     {:noreply, socket}

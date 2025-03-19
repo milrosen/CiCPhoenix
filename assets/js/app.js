@@ -54,7 +54,7 @@ Hooks.GenProseMirror = {
                     classname = "error"
                     proof = proof.error
                 } else {
-                    proof = proof.ok.join("\n")
+                    proof = proof.ok.filter(x => x.length > 0).join("\n")
                 }
                 if (!outbox.lastChild.className.includes("outbox")) {
                     outbox.insertAdjacentHTML('beforeend', `<p>${proof}</p>`)

@@ -23,20 +23,17 @@ defmodule CicFrontendWeb.DocumentChannel do
                       {:error, errormsg} ->
                         errormsg
 
-                      {:def, name, expr} ->
-                        "def #{name} := #{PrettyPrint.printExpr(expr)}"
-
-                      {:type, type} ->
+                      {:typeof, type} ->
                         PrettyPrint.printExpr(type)
 
                       {:eval, term, _} ->
                         "term evaluates to #{PrettyPrint.printExpr(term)}"
 
-                      {:with, _} ->
-                        "TODO: Print Context"
-
                       {:check, name, type, term} ->
                         "#{name} : #{PrettyPrint.printExpr(type)} = #{PrettyPrint.printExpr(term)}"
+
+                      _ ->
+                        ""
                     end
                   )
               }
